@@ -1,4 +1,4 @@
-package requestid
+package log
 
 import (
 	"context"
@@ -25,8 +25,8 @@ func RequestID(ctx context.Context) (string, bool) {
 	return id, exists
 }
 
-// MiddleWare adds a unique ID to the request's context
-func MiddleWare(next http.Handler) http.Handler {
+// RequestIDMiddleWare adds a unique ID to the request's context
+func RequestIDMiddleWare(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		next.ServeHTTP(w, r.WithContext(SetRequestID(r.Context(), NewRequestID())))
 	})

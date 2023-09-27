@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
-	"log"
+	l "log"
 	"log/slog"
 	"net/http"
 
-	"github.com/feckmore/sandbox/slog/logging"
-	"github.com/feckmore/sandbox/slog/requestid"
+	"github.com/feckmore/sandbox/slog/log"
 )
 
 const port = "8080"
@@ -18,13 +17,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	logging.Initialize()
+	log.Init()
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handler)
-	router := requestid.MiddleWare(logging.Middleware(mux))
+	router := log.RequestIDMiddleWare(log.LoggingMiddleware(mux))
 
 	slog.Debug("listening on port " + port)
 
-	log.Fatal(http.ListenAndServe(":"+port, router))
+	l.Fatal(http.ListenAndServe(":"+port, router))
 }
