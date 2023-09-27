@@ -9,11 +9,14 @@ type LogHandler struct {
 	slog.Handler
 }
 
-func (h *LogHandler) Handle(ctx context.Context, r slog.Record) error {
+// Handle inserts the request_id parameter into each log record if found in the context
+// and is required to implement slog.Handler
+func (h *LogHandler) Handle(ctx context.Context, record slog.Record) error {
 	if id, exists := RequestID(ctx); exists {
-		r.AddAttrs(slog.String("request_id", id))
+		record.AddAttrs(slog.String("request_id", id))
 	}
-	return h.Handler.Handle(ctx, r)
+
+	return h.Handler.Handle(ctx, record)
 }
 
 func (h *LogHandler) Enabled(ctx context.Context, level slog.Level) bool {

@@ -14,6 +14,8 @@ func Init() {
 		Handler: jsonHandler,
 	}
 	logger := slog.New(&myHandler)
+	logger = logger.With(slog.String("app", "slog"), slog.String("version", "1.0.0"), slog.String("env", "dev"))
+	logger.Info("logger initializing")
 	slog.SetDefault(logger)
 	slog.Info("logger initialized")
 }
