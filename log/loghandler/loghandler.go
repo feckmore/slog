@@ -14,7 +14,10 @@ type LogHandler struct {
 }
 
 func New(w io.Writer, opts *slog.HandlerOptions) slog.Handler {
-	jsonHandler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug})
+	jsonHandler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		AddSource: true,
+		Level:     slog.LevelDebug,
+	})
 	return &LogHandler{
 		Handler: jsonHandler,
 	}
