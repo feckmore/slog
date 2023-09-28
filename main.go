@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/feckmore/sandbox/slog/log"
+	"github.com/feckmore/sandbox/slog/requestid"
 )
 
 const port = "8080"
@@ -16,7 +17,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", helloWorldHandler)
-	router := log.RequestIDMiddleWare(log.LoggingMiddleware(mux))
+	router := requestid.RequestIDMiddleWare(log.LoggingMiddleware(mux))
 
 	slog.Info("listening", "port", port)
 	err := http.ListenAndServe(":"+port, router)

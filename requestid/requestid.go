@@ -1,4 +1,4 @@
-package log
+package requestid
 
 import (
 	"context"

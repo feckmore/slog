@@ -6,14 +6,19 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/feckmore/sandbox/slog/log/loghandler"
+	"github.com/feckmore/sandbox/slog/log/texthandler"
 )
 
 func Init() {
-	jsonHandler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug})
-	myHandler := LogHandler{
-		Handler: jsonHandler,
+	var handler slog.Handler
+	if os.Getenv("LOG_FORMAT") == "text" {
+		handler = texthandler.New(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug})
+	} else {
+		handler = loghandler.New(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug})
 	}
-	logger := slog.New(&myHandler)
+	logger := slog.New(handler)
 	logger = logger.With(slog.String("app", "slog"), slog.String("version", "1.0.0"), slog.String("env", "dev"))
 	logger.Info("logger initializing")
 	slog.SetDefault(logger)
