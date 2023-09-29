@@ -67,15 +67,15 @@ func (h *Handler) WithAttrs(attrs []slog.Attr) slog.Handler {
 func appendLevel(buf []byte, level slog.Level) []byte {
 	switch level {
 	case slog.LevelDebug:
-		buf = append(buf, "🔎"...)
+		buf = append(buf, "⚪"...) // 🔎
 	case slog.LevelInfo:
-		buf = append(buf, "📘"...)
+		buf = append(buf, "🔵"...) // 📘
 	case slog.LevelWarn:
-		buf = append(buf, "🔆"...)
+		buf = append(buf, "🟡"...) // 🔆
 	case slog.LevelError:
-		buf = append(buf, "🔥"...)
+		buf = append(buf, "🔴"...) // 🔥
 	default:
-		buf = append(buf, "👽"...)
+		buf = append(buf, "🟣"...) // 👽
 	}
 
 	return fmt.Appendf(buf, " %-6s", level.String())
