@@ -20,16 +20,24 @@ func Init() {
 	}
 	logger := slog.New(handler)
 	logger = logger.With(slog.String("app", "slog"), slog.String("version", "1.0.0"), slog.String("env", "dev"))
-	logger.Info("logger initializing")
 	slog.SetDefault(logger)
-	slog.Info("logger initialized")
+
+	slog.Debug("example debug log")
+	slog.Info("example info log")
+	slog.Warn("example warn log")
+	slog.Error("example error log")
 }
 
 // LoggingMiddleware logs the start and end of the request, and includes the time to process
 func LoggingMiddleware(next http.Handler) http.Handler {
 	anonymousFunction := func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
-		slog.DebugContext(r.Context(), "request start")
+		slog.DebugContext(
+			r.Context(),
+			"request start",
+			slog.String("method", r.Method),
+			slog.String("url", r.URL.String()),
+		)
 		next.ServeHTTP(w, r)
 		stop := time.Now()
 		slog.DebugContext(
