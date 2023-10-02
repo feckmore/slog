@@ -64,21 +64,31 @@ func (h *Handler) WithAttrs(attrs []slog.Attr) slog.Handler {
 	}
 }
 
+const (
+	whiteCircle  = "⚪"
+	greenCircle  = "🟢"
+	blueCircle   = "🔵"
+	purpleCircle = "🟣"
+	redCircle    = "🔴"
+	orangeCircle = "🟠"
+	yellowCircle = "🟡"
+)
+
 func appendLevel(buf []byte, level slog.Level) []byte {
-	switch level {
-	case slog.LevelDebug:
-		buf = append(buf, "⚪"...) // 🔎
-	case slog.LevelInfo:
-		buf = append(buf, "🔵"...) // 📘
-	case slog.LevelWarn:
-		buf = append(buf, "🟡"...) // 🔆
-	case slog.LevelError:
-		buf = append(buf, "🔴"...) // 🔥
-	default:
-		buf = append(buf, "🟣"...) // 👽
+	circles := map[slog.Level]string{
+		slog.LevelDebug: whiteCircle,
+		slog.LevelInfo:  blueCircle,
+		slog.LevelWarn:  yellowCircle,
+		slog.LevelError: redCircle,
 	}
 
-	return fmt.Appendf(buf, " %-6s", level.String())
+	circle := circles[level]
+	if circle == "" {
+		circle = purpleCircle
+	}
+	buf = append(buf, circle...)
+
+	return fmt.Appendf(buf, " %-8s", level.String())
 }
 
 func appendFile(buf []byte, r slog.Record) []byte {

@@ -1,6 +1,7 @@
 package log
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -22,10 +23,11 @@ func Init() {
 	logger = logger.With(slog.String("app", "slog"), slog.String("version", "1.0.0"), slog.String("env", "dev"))
 	slog.SetDefault(logger)
 
-	slog.Debug("example debug log")
-	slog.Info("example info log")
-	slog.Warn("example warn log")
-	slog.Error("example error log")
+	slog.Debug("example debug log level")
+	slog.Info("example info log level")
+	slog.Warn("example warn log level")
+	slog.Error("example error log level")
+	slog.Log(context.Background(), slog.Level(3), "example custom log level")
 }
 
 // LoggingMiddleware logs the start and end of the request, and includes the time to process
